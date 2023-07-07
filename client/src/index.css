@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base{
+    tr td,tr th{
+        @apply w-48 h-24 border-2 text-center
+    }
+    .secbutton{
+        @apply w-24 py-1 border-primary border-[1px] text-primary no-underline	
+    }
+    .primarybutton{
+        @apply bg-primary text-white px-12 py-2 rounded-md mb-8 mt-4 no-underline	
+    }
+    .input{
+        @apply border-2 px-2 py-2 w-[20rem] rounded-md border-[#D1D1D1]
+    }
+}
