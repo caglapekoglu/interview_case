@@ -83,7 +83,7 @@ const Edit = ({ questionSetId }) => {
         ))}
         
 
-      <button onClick={handleSave}>Save</button>
+      <button className="primarybutton" onClick={handleSave}>Kaydet</button>
     </div>
   );
 };

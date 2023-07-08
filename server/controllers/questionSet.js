@@ -49,7 +49,6 @@ exports.getQuestionsById = async (req, res) => {
 exports.createQuestion = async (req, res) => {
   try {
     const { name, questions } = req.body;
-console.log(questions)
     const sql = "INSERT INTO questions (name, questions) VALUES (?, ?)";
     db.run(sql, [name, JSON.stringify(questions)], (err) => {
       if (err) {

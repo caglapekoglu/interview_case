@@ -1,9 +1,13 @@
 import React from 'react'
+import AnswerComp from '../components/AnswerComp'
+import { useLocation } from 'react-router-dom'
 
 const StartInterview = () => {
-  return (
+    const { state } = useLocation();
+    const { interviewId } = state || {};
+    return (
     <div>
-        a
+        <AnswerComp interviewId={interviewId}/>
     </div>
   )
 }

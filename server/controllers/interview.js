@@ -25,20 +25,24 @@ exports.getAllInterview = async (req, res) => {
     try {
       const { username, questionset } = req.body;
       const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD formatında mevcut tarih alınır.
-      const sql2 = "INSERT INTO interview(username, date, questionset) VALUES (?, ?, ?)"
-      db.run(sql2, [username,date, JSON.stringify(questionset)], (err) => {
+      const sql2 = "INSERT INTO interview(username, date, questionset) VALUES (?, ?, ?)";
+      db.run(sql2, [username, date, JSON.stringify(questionset)], function(err) {
         if (err) {
           console.error(err);
           return res.status(500).json({ success: false, error: "Hata" });
         }
-        console.log("success", username,date, questionset);
-        res.status(200).json({ success: true });
+  
+        const insertedId = this.lastID;
+  
+        console.log("success", username, date, questionset);
+        res.status(200).json({ success: true, id: insertedId });
       });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, error: "An error occurred while creating a question." });
     }
   };
+  
 
   exports.getInterviewById = async (req, res) => {
     try {
