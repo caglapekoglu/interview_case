@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/Button';
 
 const initialFormValues = { username: "", date: "", questionset: [] };
 
@@ -26,26 +27,27 @@ const AddInterview = () => {
       let target = e.target[0];
       let nowDate = Date.now();
       setFormData(formData => ({ ...formData, date: nowDate, [target.name]: target.value }));
-
-      const response = await axios.post('http://localhost:8880/interview', formData);
-
-      if(response.status === 200){
+  
+      const updatedFormData = { ...formData, date: nowDate, [target.name]: target.value };
+      const response = await axios.post('http://localhost:8880/interview', updatedFormData);
+  
+      if (response.status === 200) {
         console.log("response", response?.data?.id)
         alert('Yeni mülakat oluşturuldu');
-        navigate("/mulakat/baslat", {state: {
-          interviewId: response?.data?.id
-        }
+        navigate("/mulakat/baslat", {
+          state: {
+            interviewId: response?.data?.id
+          }
         });
-      }else {
+      } else {
         alert('Yeni mülakat oluşturulamadı!');
       }
-
     } catch (error) {
       console.error(error);
       alert('Mülakat oluşturulurken hata oluştu!');
     }
   };
-
+  
   const fetchData = async () => {
     try {
       const response = await fetch('http://localhost:8880/questions');
@@ -70,7 +72,7 @@ const AddInterview = () => {
     <div>
       <form className="flex flex-col justify-center items-center h-screen gap-y-3" onSubmit={handleSubmit}>
         <p className="w-[20rem] text-left text-3xl mb-0">Katılımcı:</p>
-        <input className="input" type="text" name="username" placeholder="Add text" />
+        <input className='input' type="text" name="username" placeholder="Add text" />
         <h1 className="mt-5">Sorular</h1>
         <p className="w-[20rem] text-left text-3xl mb-0">Soru Setleri</p>
         <div className="flex flex-col items-baseline justify-center">
@@ -85,9 +87,7 @@ const AddInterview = () => {
         <div className='flex'>
           {JSON.stringify(selectedQuestions)}
         </div>
-        <button  className="primarybutton" type='submit'>
-          Başlat
-        </button>
+        <Button  title="Başlat" type='submit'/>
       </form>
     </div>
   );

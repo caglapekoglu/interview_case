@@ -6,6 +6,7 @@ import AddQuestions from "../pages/AddQuestions";
 import AddInterview from "../pages/AddInterview";
 import ViewInterview from "../pages/ViewInterview";
 import StartInterview from "../pages/StartInterview";
+import Result from "../pages/Result";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path:"/mulakat/baslat",
     element:<StartInterview/>
+  },
+  {
+    path:"/mulakat/sonuc",
+    element:<Result/>
   },
   {
     path: "/goruntule/:id",

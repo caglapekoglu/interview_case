@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Button from "../components/Button";
 
 const Edit = ({ questionSetId }) => {
-  const [formData, setFormData] = useState({ name: "", questions: ["", ""] });
-  const [value,setValue] = useState(formData.data)
+  const [formData, setFormData] = useState({ name: "", questions: [] });
+
   useEffect(() => {
     const fetchQuestionSet = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8880/questions/${questionSetId}`
-        );
-        setFormData(response.data);
+        const response = await axios.get(`http://localhost:8880/questions/${questionSetId}`);
+        setFormData(response.data.data);
       } catch (error) {
         console.error(error);
         alert("Veriler getirilirken hata oluştu");
@@ -20,7 +19,7 @@ const Edit = ({ questionSetId }) => {
     fetchQuestionSet();
   }, [questionSetId]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e, qId) => {
     const { name, value } = e.target;
     if (name === "name") {
       setFormData((prevFormData) => ({
@@ -28,9 +27,8 @@ const Edit = ({ questionSetId }) => {
         name: value,
       }));
     } else {
-      const questionIndex = Number(name.split("[")[1].split("]")[0]);
       const updatedQuestions = [...formData.questions];
-      updatedQuestions[questionIndex] = value;
+      updatedQuestions[qId] = value;
       setFormData((prevFormData) => ({
         ...prevFormData,
         questions: updatedQuestions,
@@ -41,10 +39,7 @@ const Edit = ({ questionSetId }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `http://localhost:8880/questions/${questionSetId}`,
-        formData
-      );
+      const response = await axios.put(`http://localhost:8880/questions/${questionSetId}`, formData);
       console.log(response.data);
       alert("Düzenlendi!");
     } catch (error) {
@@ -52,38 +47,32 @@ const Edit = ({ questionSetId }) => {
       alert("Düzenlenirken hata oluştu");
     }
   };
-  var response = JSON.stringify(formData.data);
-  if(response){
-    console.log(JSON.parse(response).questions.length)
-  }
+
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-y-3">
-       <h2>Başlık:</h2>
+      <h2>Başlık:</h2>
       <input
-        type="text"
         className="input"
+        type="text"
         name="name"
-        value={JSON.stringify(value) && JSON.parse(JSON.stringify(value)).name}
+        value={formData.name}
         onChange={handleInputChange}
-        onChangeText={(e)=>setValue(e.target.value)}
       />
       <h2>Sorular</h2>
-      
-      
-      {JSON.stringify(formData.data) &&
-        formData.data.questions.map((question, index) => (
+      {formData.questions.map((question, index) => (
+        <div key={index}>
+          <p className="w-[20rem] text-left text-3xl mb-0">Soru:</p>
           <input
-  key={index}
-  type="text"
-  className="input"
-  name={`questions[${index}]`}
-  value={question || ""}
-  onChange={handleInputChange}
-/>
-        ))}
-        
-
-      <button className="primarybutton" onClick={handleSave}>Kaydet</button>
+            className="input"
+            type="text"
+            name={`questions.${index}`}
+            value={question || ""}
+            onChange={(e) => handleInputChange(e, index)}
+            placeholder="Add text"
+          />
+        </div>
+      ))}
+      <Button title="Kaydet" onClick={handleSave} />
     </div>
   );
 };

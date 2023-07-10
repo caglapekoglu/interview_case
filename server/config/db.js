@@ -15,6 +15,8 @@ db.run(sql2);
 const sql3 = "CREATE TABLE IF NOT EXISTS question(id INTEGER PRIMARY KEY, title, degree, answers)"
 db.run(sql3);
 
+const sql4 = "CREATE TABLE IF NOT EXISTS answer(id INTEGER PRIMARY KEY, interview_id, question_id, degrees)"
+db.run(sql4);
 module.exports = db;
 
 module.exports = db;
