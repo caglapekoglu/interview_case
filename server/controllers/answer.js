@@ -12,7 +12,7 @@ exports.getAllAnswer = async (req, res) => {
         return res.status(404).json({ success: false, error: "Eşleşen soru bulunamadı." });
       }
 
-      return res.json({ status: 200, data: rows, success: true });
+      res.status(200).json({ success: true, id: this.lastID, data: rows });
     });
   } catch (error) {
     console.error(error);
@@ -20,17 +20,17 @@ exports.getAllAnswer = async (req, res) => {
   }
 };
 
-exports.createAnswer= async (req, res) => {
+exports.createAnswer = async (req, res) => {
   try {
-    const {  interview_id, question_id, degrees } = req.body;
+    const { interview_id, question_id, degrees } = req.body;
     const sql3 = "INSERT INTO answer (interview_id, question_id, degrees) VALUES (?, ?, ?)";
-    db.run(sql3, [ interview_id, question_id, degrees], function (err) {
+    db.run(sql3, [interview_id, question_id, degrees], function (err) {
       if (err) {
         console.error(err);
         return res.status(500).json({ success: false, error: "Soru oluşturulurken bir hata oluştu." });
       }
-      console.log("success",  interview_id, question_id, degrees);
-      res.status(200).json({ success: true, id: this.lastID });
+      console.log("success", interview_id, question_id, degrees);
+      res.status(200).json({ success: true, id: this.lastID, degrees: degrees });
     });
   } catch (error) {
     console.error(error);
@@ -52,9 +52,7 @@ exports.getAnswerById = async (req, res) => {
         return res.status(404).json({ success: false, error: "Soru bulunamadı." });
       }
 
-      const { id, title, degree, answers } = row;
-
-      return res.json({ status: 200, data: { id, title, degree, answers }, success: true });
+      return res.json({ status: 200, data: { ...row, degrees:  JSON?.parse(row?.degrees) }, success: true });
     });
   } catch (error) {
     console.error(error);

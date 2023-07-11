@@ -9,6 +9,7 @@ const Edit = ({ questionSetId }) => {
     const fetchQuestionSet = async () => {
       try {
         const response = await axios.get(`http://localhost:8880/questions/${questionSetId}`);
+        console.log(response.data)
         setFormData(response.data.data);
       } catch (error) {
         console.error(error);

@@ -9,13 +9,17 @@ const AddInterview = () => {
   const [formData, setFormData] = useState(initialFormValues);
   const [questions, setQuestions] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [itemName, setItemName] = useState([]);
+
   const navigate = useNavigate();
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-
+    const question = questions.find((item) => item.id === Number(value));
+    console.log("skjd",value)
     if (checked) {
       setSelectedQuestions(e => [...e, {id: value}])
+      setItemName(e=>[...e, {name: question.name}])
     } else {
       setSelectedQuestions(selectedQuestions.filter(item => item.id !== value))
     }
@@ -85,7 +89,7 @@ const AddInterview = () => {
             ))}
         </div>
         <div className='flex'>
-          {JSON.stringify(selectedQuestions)}
+          {JSON.stringify(itemName)}
         </div>
         <Button  title="Başlat" type='submit'/>
       </form>
@@ -94,3 +98,4 @@ const AddInterview = () => {
 };
 
 export default AddInterview;
+

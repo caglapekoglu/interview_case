@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import Button from "./Button";
 const AnswerComp = ({ interviewId }) => {
   const [questions, setQuestions] = useState([]);
-  const [degrees, setDegrees] = useState([]);
+  const [degrees, setDegrees] = useState({});
+  const [isSuccess, setIsSuccess] = useState(false)
+
   const options = [
     {
       title: "yetersiz",
@@ -22,6 +24,35 @@ const AnswerComp = ({ interviewId }) => {
       level: 3,
     },
   ];
+
+  const postQuestion = async (postData) => {
+    const newData = {
+      ...postData,
+      degrees: JSON.stringify(postData?.degrees)
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:8880/answer`, newData);
+      if (response.status === 200) {
+        setIsSuccess(true)
+      } else {
+        alert("Bir sorun oluştu!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Bir hata oluştu. Veri alınamadı.");
+    }
+  }
+
+  const handleAnswerSubmit = () => {
+    const dataForPost = {
+      interview_id: interviewId,
+      question_id: 3,
+      degrees: degrees
+    }
+    postQuestion(dataForPost)
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,11 +96,10 @@ const AnswerComp = ({ interviewId }) => {
   }, [interviewId]);
 
   const handleAnswerChange = (i, level) => {
-    setDegrees((prevAnswers) => {
-      const newAnswers = [...prevAnswers];
-      newAnswers[i] = level;
-      return newAnswers;
-    });
+    setDegrees((prevDegrees) => ({
+      ...prevDegrees, // keep the previous degrees
+      [i]: level, // set the level for the current index
+    }));
   };
 
   return (
@@ -87,17 +117,17 @@ const AnswerComp = ({ interviewId }) => {
                     checked={degrees[i] === item.level}
                     onChange={() => handleAnswerChange(i, item.level)}
                   />
-                  <p className="mb-0">{item.title}</p>
+                  <p className="mb-0">{item?.title}</p>
                 </label>
               ))}
             </div>
           </div>
         ))}
         <div>
-        <Button title="İlerle"/>
+          <Button onClick={() => handleAnswerSubmit()} title="İlerle" />
         </div>
       </div>
-      
+
     </div>
   );
 };

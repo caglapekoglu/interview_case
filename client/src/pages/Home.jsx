@@ -31,40 +31,41 @@ const Home = () => {
       }
     }
   };
-  
+
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
       <h1>Soru Setleri</h1>
       <a href='/ekle' className="primarybutton">Ekle</a>
       <table className='border-collapse border-2'>
-      <thead>
-        <tr>
-          <th>İsim</th>
-          <th>İşlem</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>İsim</th>
+            <th>İşlem</th>
+          </tr>
         </thead>
         <tbody>
-        {data &&
-            data.map((item,i) => {
+          {data &&
+            data.map((item, i) => {
               return (<tr key={i}>
-          <td>
-           {item?.name}
-          </td>
-          <td>
-            <div className='flex flex-col items-center justify-center gap-y-1'>
-            <a
+                <td>
+                  {item?.name}
+                </td>
+                <td>
+                  <div className='flex flex-col items-center justify-center gap-y-1'>
+                    <a
                       href={`/duzenle/${item?.id}`}
                       type="submit"
-                     className='secbutton decoration-white'>
-              Düzenle
-            </a>
-            <button onClick={ () => deletes(item)} className='secbutton'>
-              Sil
-            </button>
-            </div>
-          </td>
-          </tr>)})}
-          </tbody>
+                      className='secbutton decoration-white'>
+                      Düzenle
+                    </a>
+                    <button onClick={() => deletes(item)} className='secbutton'>
+                      Sil
+                    </button>
+                  </div>
+                </td>
+              </tr>)
+            })}
+        </tbody>
       </table>
     </div>
   )
